@@ -17,7 +17,8 @@ const postSchema = new Schema({
         required: true
     }
 },{
-     timestamps: true,
+    timestamps: true,
     versionKey: false
 })
+
 export default model('Post', postSchema)

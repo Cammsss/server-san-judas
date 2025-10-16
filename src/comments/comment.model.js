@@ -11,7 +11,7 @@ const commentSchema = new Schema ({
         ref: 'Post',
         requiredim: true,
     },
-    authot:{
+    author:{
          type: Schema.Types.ObjectId,
         ref: 'User',
         required: true,

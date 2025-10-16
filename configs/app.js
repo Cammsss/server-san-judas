@@ -9,6 +9,7 @@ import userModel from '../src/users/user.model.js'
 import authRoutes from '../src/auth/auth.routes.js'
 import postRoutes from '../src/posts/post.routes.js'
 import requestLimit from '../middlewares/request-limit.js'
+import commentRoutes from '../src/comments/comment.routes.js'
 import 'dotenv/config';
 
 
@@ -31,6 +32,7 @@ const middlewares = (app) => {
 const routes = (app) => {
     app.use('/api/auth', authRoutes)
     app.use('/api/posts', postRoutes)
+    app.use('/api/comments', commentRoutes)
 }
 
 const conectarDB = async () =>{
