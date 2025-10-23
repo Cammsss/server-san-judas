@@ -1,7 +1,7 @@
 import { Schema, model } from 'mongoose'
 
 const commentSchema = new Schema ({
-    text:{
+    text: {
      type: String,
     required: true,
      trim: true,
@@ -16,10 +16,6 @@ const commentSchema = new Schema ({
         ref: 'User',
         required: true,
     },
-    comments: [{
-        type: Schema.Types.ObjectId,
-        ref: 'Comment '
-    }]
 },{
     timestamps: true,
     versionKey: false

@@ -2,19 +2,20 @@
 
 import mongoose from 'mongoose'
 
-export const dbConnection = async () =>{
+export const dbConnection = async () => {
     try{
         mongoose.connection.on('error', () => {
-            console.log('MongoDb | no se pudo conectar a mongoDB')  
+            console.log('MongoDb | no se pudo conectar a mongoDB')
+            mongoose.disconnect()  
         })
          mongoose.connection.on('connecting', () => {
             console.log('MongoDb | intentando conectar a mongoDB')  
         })
          mongoose.connection.on('connected', () => {
-            console.log('MongoDb | conectando a mongoDB')  
+            console.log('MongoDb | conectado a mongoDB')  
         }) 
          mongoose.connection.on('open', () => {
-            console.log('MongoDb | conectando a la base de datos')  
+            console.log('MongoDb | conectado a la base de datos')  
         })
          mongoose.connection.on('reconnected', () => {
             console.log('MongoDb | reconectando a mongoDB')  

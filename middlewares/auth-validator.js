@@ -22,7 +22,7 @@ export const loginValidator = [
     check("email", "No es un email válido").optional().isEmail(),
     check("username", "El nombre del usuario no es válido").optional(),
     check("password", "La constraseña debe de tener al menos 8 caracteres").isLength({
-        min: 8
+        min: 6
     }),
     validarCampos,
 ]
