@@ -7,6 +7,7 @@ import morgan from 'morgan';
 import { dbConnection } from './db.js';
 import 'dotenv/config';
 import dogRoutes from '../src/dogs/dog.routes.js';
+import authRoutes from '../src/auth/auth.routes.js';
 import requestLimit from '../middlewares/request-limit.js';
 import { handleErrors } from '../middlewares/handle-errors.js';
 
@@ -28,6 +29,7 @@ const middlewares = (app) => {
 }
 
 const routes = (app) => {
+    app.use('/api/auth', authRoutes);
     app.use('/api/dogs', dogRoutes);
 }
 
