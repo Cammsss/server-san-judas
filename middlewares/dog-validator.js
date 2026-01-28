@@ -10,7 +10,12 @@ export const createDogValidator = [
     body('sex', 'El sexo debe ser macho o hembra').isIn(['macho', 'hembra', 'Macho', 'Hembra']),
     body('breed', 'La raza es obligatoria').not().isEmpty(),
     body('description', 'La descripción es obligatoria').not().isEmpty(),
-    body('description', 'La descripción no puede exceder los 100 caracteres').isLength({ max: 100 }),
+    body('description', 'La descripción no puede exceder las 100 palabras').custom(value => {
+        if (!value) return true;
+        const wordCount = value.trim().split(/\s+/).length;
+        if (wordCount > 100) return false;
+        return true;
+    }),
 
     // Custom validator for images (Multer places files in req.files)
     (req, res, next) => {
