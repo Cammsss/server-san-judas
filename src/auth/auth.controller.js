@@ -1,6 +1,7 @@
 import User from '../users/user.model.js';
 import { sendVerificationEmail } from '../../services/email.service.js';
 import { generarJWT } from '../../helpers/JWT-generate.js';
+import { hash, verify } from "argon2";
 
 export const initVerification = async (req, res) => {
     try {
@@ -90,6 +91,86 @@ export const verifyCode = async (req, res) => {
         return res.status(500).json({
             message: "Error al verificar código",
             error: error.message
+        });
+    }
+}
+
+export const register = async (req, res) => {
+    try {
+        const data = req.body;
+
+        if (req.file) {
+            data.profilePicture = req.file.filename;
+        }
+
+        const encryptedPassword = await hash(data.password);
+        data.password = encryptedPassword;
+
+        const user = await User.create(data);
+
+        return res.status(201).json({
+            message: "User has been created",
+            name: user.name,
+            email: user.email
+        });
+    } catch (err) {
+        return res.status(500).json({
+            message: "User registration failed",
+            error: err.message
+        });
+    }
+}
+
+export const login = async (req, res) => {
+    try {
+        const { email, password, username } = req.body;
+        const lowerEmail = email ? email.toLowerCase() : null;
+        const lowerUsername = username ? username.toLowerCase() : null;
+
+        const user = await User.findOne({
+            $or: [
+                { email: lowerEmail },
+                { username: lowerUsername },
+                { email: lowerUsername },
+                { username: lowerEmail }
+            ]
+        });
+
+        if (!user) {
+            return res.status(400).json({
+                msg: 'Credenciales incorrectas, Correo no existe en la base de datos'
+            });
+        }
+
+        if (!user.status) {
+            return res.status(400).json({
+                msg: 'El usuario no existe en la base de datos'
+            });
+        }
+
+        const validPassword = await verify(user.password, password);
+        if (!validPassword) {
+            return res.status(400).json({
+                msg: 'La contraseña es incorrecta'
+            });
+        }
+
+        const token = await generarJWT(user.id, user.email);
+
+        res.status(200).json({
+            msg: 'Inicio de sesión exitoso',
+            userDetails: {
+                username: user.username,
+                token,
+                profilePicture: user.profilePicture
+            }
+        })
+
+    } catch (e) {
+        console.log(e);
+        res.status(500).json({
+            message: "Server error",
+            error: e.message
         });
     }
 }
