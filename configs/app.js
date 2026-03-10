@@ -8,6 +8,7 @@ import { dbConnection } from './db.js';
 import 'dotenv/config';
 import dogRoutes from '../src/dogs/dog.routes.js';
 import authRoutes from '../src/auth/auth.routes.js';
+import adoptionRoutes from '../src/adoptions/adoption.routes.js';
 import requestLimit from '../middlewares/request-limit.js';
 import { handleErrors } from '../middlewares/handle-errors.js';
 
@@ -21,7 +22,7 @@ const middlewares = (app) => {
         allowedHeaders: ['Content-Type', 'Authorization']
     }));
     app.use(helmet({
-        crossOriginResourcePolicy: { policy: "cross-origin" },
+        crossOriginResourcePolicy: { policy: "cross-origin" },   
         crossOriginEmbedderPolicy: false
     }));
     app.use(morgan('dev'));
@@ -31,6 +32,7 @@ const middlewares = (app) => {
 const routes = (app) => {
     app.use('/api/auth', authRoutes);
     app.use('/api/dogs', dogRoutes);
+    app.use('/api/adoptions', adoptionRoutes);
 }
 
 const conectarDB = async () => {

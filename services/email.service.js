@@ -30,3 +30,36 @@ export const sendVerificationEmail = async (email, code) => {
         return false;
     }
 }
+
+export const sendAdoptionConfirmationEmail = async (email, adoptionData) => {
+    try {
+        const transporter = nodemailer.createTransport({
+            service: 'gmail',
+            auth: {
+                user: process.env.SMTP_USER || 'tu_correo@gmail.com',
+                pass: process.env.SMTP_PASS || 'tu_contraseña_de_aplicacion'
+            }
+        });
+
+        const mailOptions = {
+            from: process.env.SMTP_USER || 'no-reply@adoption.com',
+            to: email,
+            subject: 'Confirmación de Registro para Adopción',
+            text: `Hola ${adoptionData.fullName}, hemos recibido tu solicitud para adoptar a ${adoptionData.dogName}. Pronto nos pondremos en contacto contigo.`,
+            html: `<h3>Confirmación de Registro para Adopción</h3>
+                   <p>Hola <b>${adoptionData.fullName}</b>,</p>
+                   <p>Hemos recibido correctamente tu solicitud para adoptar a <b>${adoptionData.dogName}</b>.</p>
+                   <p>Nuestro equipo revisará tu perfil y se pondrá en contacto contigo pronto.</p>
+                   <br/>
+                   <p>¡Gracias por querer brindarle un hogar a un peludo!</p>`
+        };
+
+        const info = await transporter.sendMail(mailOptions);
+        console.log('Correo de adopción enviado: %s', info.messageId);
+        return true;
+
+    } catch (error) {
+        console.error('Error al enviar el correo de adopción:', error);
+        return false;
+    }
+}
