@@ -9,7 +9,6 @@ import 'dotenv/config';
 import dogRoutes from '../src/dogs/dog.routes.js';
 import authRoutes from '../src/auth/auth.routes.js';
 import adoptionRoutes from '../src/adoptions/adoption.routes.js';
-import requestLimit from '../middlewares/request-limit.js';
 import { handleErrors } from '../middlewares/handle-errors.js';
 
 const middlewares = (app) => {
@@ -26,7 +25,6 @@ const middlewares = (app) => {
         crossOriginEmbedderPolicy: false
     }));
     app.use(morgan('dev'));
-    app.use(requestLimit);
 }
 
 const routes = (app) => {
