@@ -10,6 +10,7 @@ import dogRoutes from '../src/dogs/dog.routes.js';
 import authRoutes from '../src/auth/auth.routes.js';
 import adoptionRoutes from '../src/adoptions/adoption.routes.js';
 import { handleErrors } from '../middlewares/handle-errors.js';
+import cloudinary from './cloudinary.js';
 
 const middlewares = (app) => {
     app.use(express.json());

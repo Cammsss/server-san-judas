@@ -16,7 +16,7 @@ export const initVerification = async (req, res) => {
         const verificationExpires = new Date(Date.now() + 60 * 1000); // 1 minute from now
 
         // Check if user exists
-        let user = await User.findOne({ email });
+        let user = await User.findOne({ email: String(email) });
 
         if (!user) {
             // Create new temporary user
@@ -54,7 +54,7 @@ export const verifyCode = async (req, res) => {
             return res.status(400).json({ message: "Email y código son obligatorios" });
         }
 
-        const user = await User.findOne({ email });
+        const user = await User.findOne({ email: String(email) });
 
         if (!user) {
             return res.status(404).json({ message: "Usuario no encontrado" });
@@ -97,16 +97,18 @@ export const verifyCode = async (req, res) => {
 
 export const register = async (req, res) => {
     try {
-        const data = req.body;
-
-        if (req.file) {
-            data.profilePicture = req.file.filename;
-        }
-
-        const encryptedPassword = await hash(data.password);
-        data.password = encryptedPassword;
-
-        const user = await User.create(data);
+        const { name, surname, username, email, password } = req.body;
+        
+        const encryptedPassword = await hash(password);
+        
+        const user = await User.create({
+            name,
+            surname,
+            username,
+            email,
+            password: encryptedPassword,
+            profilePicture: req.file ? req.file.filename : undefined
+        });
 
         return res.status(201).json({
             message: "User has been created",
@@ -129,10 +131,10 @@ export const login = async (req, res) => {
 
         const user = await User.findOne({
             $or: [
-                { email: lowerEmail },
-                { username: lowerUsername },
-                { email: lowerUsername },
-                { username: lowerEmail }
+                { email: String(lowerEmail) },
+                { username: String(lowerUsername) },
+                { email: String(lowerUsername) },
+                { username: String(lowerEmail) }
             ]
         });
 

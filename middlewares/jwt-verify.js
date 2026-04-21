@@ -4,7 +4,9 @@ export const validateJWT = (req, res, next) => {
     let token = req.body.token || req.query.token || req.headers['authorization']
 
     if (!token){
-        return res.status({ message: 'Es necesario el token de autorización'})
+        return res.status(401).json({ 
+            message: 'Es necesario el token de autorización'
+        })
     }
 
     try{
