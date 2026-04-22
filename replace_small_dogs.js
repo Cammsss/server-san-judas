@@ -1,6 +1,9 @@
 import mongoose from "mongoose";
+import dotenv from "dotenv";
 
-const MONGODB_URI = "mongodb://localhost:27017/Nisecajo";
+dotenv.config();
+
+const MONGODB_URI = process.env.URI_MONGODB || "mongodb://localhost:27017/Nisecajo";
 
 const dogSchema = new mongoose.Schema({
     name: { type: String, required: true },

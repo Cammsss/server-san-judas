@@ -2,8 +2,11 @@ import mongoose from "mongoose";
 import https from "https";
 import fs from "fs";
 import path from "path";
+import dotenv from "dotenv";
 
-const MONGODB_URI = "mongodb://localhost:27017/Nisecajo";
+dotenv.config();
+
+const MONGODB_URI = process.env.URI_MONGODB || "mongodb://localhost:27017/Nisecajo";
 const ASSETS_DIR = "c:\\Users\\4to. Bach_A\\Desktop\\Bloque 2. Java\\client\\src\\assets\\breeds";
 
 const dogSchema = new mongoose.Schema({
