@@ -1,9 +1,20 @@
 import Adoption from './adoption.model.js';
-import { sendAdoptionConfirmationEmail } from '../../services/email.service.js';
+import User from '../users/user.model.js';
 
 export const saveAdoption = async (req, res) => {
     try {
         const { fullName, email, birthDate, phone, country, dogName } = req.body;
+
+        // Buscar al usuario que inició sesión
+        const loggedInUser = await User.findById(req.uid);
+        
+        // Verificar si el correo del formulario es el mismo con el que se registró
+        if (!loggedInUser || loggedInUser.email !== email) {
+            return res.status(400).json({
+                success: false,
+                message: "El correo proporcionado debe ser el mismo con el que te registraste en la cuenta. Solicitud denegada."
+            });
+        }
 
         // Guardar en MongoDB
         const adoption = new Adoption({ 
@@ -17,12 +28,9 @@ export const saveAdoption = async (req, res) => {
         
         await adoption.save();
 
-        // Enviar correo de confirmación
-        await sendAdoptionConfirmationEmail(email, { fullName, dogName });
-
         return res.status(201).json({ 
             success: true,
-            message: "Registro de adopción guardado y correo enviado", 
+            message: "Solicitud de adopción recibida con éxito.", 
             adoption 
         });
     } catch (error) {

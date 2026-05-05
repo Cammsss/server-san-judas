@@ -11,6 +11,14 @@ export const publicLimiter = rateLimit({
     legacyHeaders: false,
 })
 
+export const loginLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000,
+    max: 5,
+    message: "Demasiadas peticiones de inicio de sesión, intenta más tarde",
+    standardHeaders: true,
+    legacyHeaders: false,
+})
+
 export const authtenticatedLimiter = rateLimit({
     windowMs,
     max,

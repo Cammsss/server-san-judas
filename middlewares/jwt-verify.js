@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken'
 
 export const validateJWT = (req, res, next) => {
-    let token = req.body.token || req.query.token || req.headers['authorization']
+    let token = req.body?.token || req.query?.token || req.headers['authorization']
 
     if (!token){
         return res.status(401).json({ 
@@ -10,6 +10,9 @@ export const validateJWT = (req, res, next) => {
     }
 
     try{
+        if (typeof token !== 'string') {
+            token = String(token);
+        }
         token = token.replace(/^Bearer\s+/, "")
         const decoded = jwt.verify(token, process.env.TOKEN_KEY)
         req.uid = decoded.uid
