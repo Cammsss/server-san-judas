@@ -13,7 +13,7 @@ export const publicLimiter = rateLimit({
 
 export const loginLimiter = rateLimit({
     windowMs: 15 * 60 * 1000,
-    max: 5,
+    max: 30,
     message: "Demasiadas peticiones de inicio de sesión, intenta más tarde",
     standardHeaders: true,
     legacyHeaders: false,
