@@ -163,6 +163,8 @@ export const login = async (req, res) => {
             msg: 'Inicio de sesión exitoso',
             userDetails: {
                 username: user.username,
+                name: user.name,
+                email: user.email,
                 token,
                 profilePicture: user.profilePicture
             }
