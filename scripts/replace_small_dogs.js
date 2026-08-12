@@ -3,7 +3,7 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-const MONGODB_URI = process.env.URI_MONGODB || "mongodb://localhost:27017/Nisecajo";
+const MONGODB_URI = "mongodb://localhost:27017/Nisecajo";
 
 const dogSchema = new mongoose.Schema({
     name: { type: String, required: true },
@@ -22,7 +22,7 @@ const dogs = [
         name: "Pepe",
         breedName: "Chihuahua",
         age: "2 años",
-        image: "chihuahua.jpg",
+        image: "chihuahua.png",
         category: "Raza Pequeña",
         history: "Pepe es pequeño pero con una gran valentía. Es el compañero ideal para un hogar tranquilo."
     },
@@ -30,7 +30,7 @@ const dogs = [
         name: "Fluffy",
         breedName: "Pomerania",
         age: "1 año",
-        image: "pomeranian.jpg",
+        image: "pomeranian.png",
         category: "Raza Pequeña",
         history: "Fluffy es todo ternura. Su pelaje esponjoso es su mayor orgullo."
     },
@@ -38,7 +38,7 @@ const dogs = [
         name: "Yorky",
         breedName: "Yorkshire Terrier",
         age: "3 años",
-        image: "yorkie.jpg",
+        image: "yorkshire.png",
         category: "Raza Pequeña",
         history: "Yorky es elegante y siempre está alerta. Un excelente perro guardián a pequeña escala."
     },
@@ -46,7 +46,7 @@ const dogs = [
         name: "Shishi",
         breedName: "Shih Tzu",
         age: "4 años",
-        image: "shih_tzu.jpg",
+        image: "shihtzu.jpg",
         category: "Raza Pequeña",
         history: "Shishi es la calma personificada. Le encantan los mimos y las largas siestas."
     },
@@ -146,9 +146,21 @@ async function replaceDogs() {
         await mongoose.connect(MONGODB_URI);
         console.log("✅ Conectado.");
         await Dog.deleteMany({ category: "Raza Pequeña" });
-        console.log("🚀 Insertando...");
-        await Dog.insertMany(dogs);
-        console.log("⭐ ¡Listo!");
+        console.log("🚀 Insertando perros con imágenes únicas...");
+        
+        for (const dog of dogs) {
+            await new Dog({ 
+                name: dog.name, 
+                breedName: dog.breedName, 
+                age: dog.age, 
+                image: dog.image, 
+                category: dog.category, 
+                history: dog.history 
+            }).save();
+            console.log(`- ${dog.breedName} (${dog.name}) → ${dog.image}`);
+        }
+        
+        console.log("⭐ ¡Listo! Cada raza tiene su propia imagen única.");
         process.exit(0);
     } catch (error) {
         console.log("❌ Error:", error);
